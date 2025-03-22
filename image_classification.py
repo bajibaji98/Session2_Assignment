@@ -110,3 +110,13 @@ for epoch in range(100):
 
 print("Neural Network Training Completed!")
 
+# Compare classifier accuracies
+print(f"SVM Accuracy: {svm_accuracy:.4f}")
+print(f"Softmax Accuracy: {softmax_accuracy:.4f}")
+
+# Plot performance comparison
+plt.bar(["SVM", "Softmax"], [svm_accuracy, softmax_accuracy])
+plt.ylabel("Accuracy")
+plt.title("Classifier Comparison")
+plt.show()
+
