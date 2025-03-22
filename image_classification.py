@@ -24,20 +24,25 @@ testset.data = testset.data[[i for i in range(len(testset.targets)) if testset.t
 testset.targets = [testset.targets[i] for i in range(len(testset.targets)) if testset.targets[i] in selected_classes]
 
 # Display a sample image
+print("Showing image...")
 plt.imshow(trainset.data[0])
 plt.title(f"Sample Image - Class {trainset.targets[0]}")
 plt.axis("off")
 plt.show()
+plt.close('all')
+print("Image closed!")
+print("Skipped showing the image.")
+
 
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
 # Flatten images for SVM (from 32x32x3 to 1D array)
-X_train = trainset.data.reshape(len(trainset.data), -1)
-y_train = trainset.targets
+X_train = trainset.data.reshape(len(trainset.data), -1)[:1000]
+y_train = trainset.targets[:1000]
 
-X_test = testset.data.reshape(len(testset.data), -1)
-y_test = testset.targets
+X_test = testset.data.reshape(len(testset.data), -1)[:1000]
+y_test = testset.targets[:1000]
 
 # Train SVM classifier
 svm = SVC(kernel='linear')
@@ -48,3 +53,18 @@ y_pred_svm = svm.predict(X_test)
 svm_accuracy = accuracy_score(y_test, y_pred_svm)
 
 print(f"SVM Accuracy: {svm_accuracy:.4f}")
+
+
+from sklearn.linear_model import LogisticRegression
+
+# Train Softmax classifier
+softmax = LogisticRegression(multi_class='multinomial', solver='lbfgs', max_iter=1000)
+softmax.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred_softmax = softmax.predict(X_test)
+softmax_accuracy = accuracy_score(y_test, y_pred_softmax)
+
+print(f"Softmax Accuracy: {softmax_accuracy:.4f}")
+
+
